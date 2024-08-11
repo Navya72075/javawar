@@ -1,38 +1,45 @@
-pipeline
-{
-    agent any 
-    
-    stages
-    {
-     
-     stage ('compile code')
-     {
-         steps
-         {
-             sh 'mvn clean install'
-         }
-     }
-     stage ('test')
-     {
-         steps
-         {
-             sh 'mvn test'
-         }
-     }
-     stage ('find my binary')
-     {
-         steps
-         {
-             sh 'find / -name *.war'
-         }
-     }
-     stage ('deploy')
-     {
-         steps
-         {
-             sh 'cp -R /root/.jenkins/workspace/dpipeline/target/* /opt/apache-tomcat-8.5.3/webapps'
-         }
-     }
+pipeline {
+    agent any
+    tools{
+        jdk 'jdk17'
+        maven 'maven'
         
+    }
+    stages {
+        stage('SCM') {
+            steps {
+            git 'https://github.com/RavitejaAdepudi/javawar.git'    
+            }
+        }
+        stage('VALIDATE') {
+            steps {
+            sh "mvn validate"    
+            }
+        }
+        stage('COMPILE') {
+            steps {
+            sh "mvn compile"    
+            }
+        }
+        stage('TEST') {
+            steps {
+            sh "mvn test"    
+            }
+        }
+        stage('PACKAGE') {
+            steps {
+            sh "mvn package"    
+            }
+        }
+        stage('VERIFY') {
+            steps {
+            sh "mvn verify"    
+            }
+        }
+        stage('INSTALL') {
+            steps {
+            sh "mvn install"    
+            }
+        }
     }
 }
