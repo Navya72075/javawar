@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('SCM') {
             steps {
-            git 'https://github.com/RavitejaAdepudi/javawar.git'    
+            git branch: 'main', credentialsId: 'gitcred', url: 'https://github.com/Navya72075/javawar.git'    
             }
         }
         stage('VALIDATE') {
